@@ -1,11 +1,13 @@
-inventory = {"Felix": ("123", ["Bannan","Äpple", "Kossa"])}
+inventory = {"Felix": ("123", ["Bannan","Äpple", "Kossa"])} # denna var bara för test ska tömmas sen
 alive = True
+
+# 
 def login(user_name, password):
     if user_name in inventory:
         if password == inventory[user_name][0]:
             return True
         else:
-            print("Wrong password")
+            return False
     else:
         print("No user found...")
         if input("Add user or try again? a/b: ") == "a":
@@ -14,10 +16,12 @@ def login(user_name, password):
             pass
         
         
+# Ändrar användarens input till lite bokstav för att undvika fel
 def validate(user_input):
     return user_input[0].lower()
     
    
+# Skapar en ny key med tomt inventory i dictonaryn, 
 def signup(user_name, password):
     inventory[user_name] = (password, [])   
 
@@ -49,6 +53,9 @@ def menu1():
         
         if ok:
             menu2(user_name)
+        else:
+            input("Incorrect password \n Try again?")
+            
     else:
         return False
     

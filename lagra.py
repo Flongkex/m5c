@@ -2,7 +2,7 @@ inventory = {"Felix": ("123", ["Bannan","Äpple", "Kossa"])} # denna var bara f�
 alive = True
 
 # 
-def login(user_name, password):
+def validate_user_login(user_name, password):
     if user_name in inventory:
         if password == inventory[user_name][0]:
             return True
@@ -49,18 +49,17 @@ def signin():
             user_name = input("användarnamn: ")
             password = input("lösen: ")
         
-            ok1 = login(user_name,password)
+            ok1 = validate_user_login(user_name,password)
             if ok1:
                 ok3 = menu2(user_name)
                 if ok3 == False:
                     break
-            else:
+            elif ok1 == False:
                 ok2 = input("Incorrect password... \n Try again? (y/n) ")
                 if ok2 == "n":
                     break
             
                     
-
 def menu1():
     print("a) login")
     print("b) quit")
@@ -71,11 +70,11 @@ def menu1():
     else:
         return False
     
-    
 
 def logout():
     pass
 
+# Printar hur många items vi har och sedan printas alla items ut radvis
 def view_inventory(key):
     i = 1
     print(f"These are your {len(inventory[key][1])} items")

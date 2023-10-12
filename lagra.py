@@ -1,106 +1,115 @@
-inventory = {"Felix": ("123", ["Bannan","Äpple", "Kossa"])} # denna var bara för test ska tömmas sen
-alive = True
 
-# 
-def validate_user_login(user_name, password):
-    if user_name in inventory:
-        if password == inventory[user_name][0]:
-            return True
-        else:
-            return False
-    else:
-        print("No user found...")
-        if input("Add user or try again? a/b: ") == "a":
-            signup(user_name, password)
-        else:
-            pass
-        
-        
-# Ändrar användarens input till lite bokstav för att undvika fel
-def validate(user_input):
-    return user_input[0].lower()
-    
-   
-# Skapar en ny key med tomt inventory i dictonaryn, 
-def signup(user_name, password):
-    inventory[user_name] = (password, [])   
+class Lagra:
+    def __init__(self):
+        self.users = {"Felix": "123"}
+        self.inventory = {"Felix": ["Bannan", "Äpple", "Kossa"]}  # denna var bara för test ska tömmas sen
+        self.current_user = None
+        self.alive = True
 
-def menu2(user_name):
-    while True:
-        print("a) Add item")
-        print("b) View Inventory")
-        print("c) logout")
-        
-        user_input = validate(str(input("")))
-        
-        if user_input == "a":
-            add_item(user_name)
-        elif user_input == "b":
-            view_inventory(user_name)
-        elif user_input == "c":
-            return False
-            #menu1()
-            #logout(user_name)
-            
-    
-    
-def signin():
+    def validate_user_login(self, user_name, password):
+        if user_name in self.inventory:
+            if password == self.users[user_name]:
+                self.current_user = user_name
+                return True
+            else:
+                return False
+        else:
+            print("User was not found")
+            if input("Add user or try again? a/b: ") == "a":
+                self.signup(user_name, password)
+                return True
+            else:
+                pass
+
+    # Ändrar användarens input till lite bokstav för att undvika fel
+    def validate(self, user_input):
+        return user_input[0].lower()
+
+    # Skapar en ny key med tomt inventory i dictonaryn,
+    def signup(self, user_name, password):
+        self.users[user_name] = password
+        self.inventory[user_name] = []
+        self.current_user = user_name
+
+    def menu2(self):
+        while True:
+            print("a) Add item")
+            print("b) View Inventory")
+            print("c) logout")
+
+            user_input = self.validate(input())
+
+            if user_input == "a":
+                self.add_item()
+                return True
+            elif user_input == "b":
+                self.view_inventory()
+                return True
+            elif user_input == "c":
+                self.logout()
+                return False
+                # menu1()
+
+    def signin(self):
         while True:
             user_name = input("användarnamn: ")
             password = input("lösen: ")
-        
-            ok1 = validate_user_login(user_name,password)
-            if ok1:
-                ok3 = menu2(user_name)
-                if ok3 == False:
+
+            successful_login = self.validate_user_login(user_name, password)
+            if successful_login:
+                print(f"Välkommen {self.current_user}\n")
+                stay_logged_in = self.menu2()
+                if stay_logged_in:
                     break
-            elif ok1 == False:
-                ok2 = input("Incorrect password... \n Try again? (y/n) ")
-                if ok2 == "n":
+
+            else:
+                prompt_retry = input("Incorrect password... \n Try again? (y/n) ")
+                if prompt_retry == "n":
                     break
-            
-                    
-def menu1():
-    print("a) login")
-    print("b) quit")
-    user_input = validate(str(input("")))
-    if user_input == "a":
-        return True
-            
-    else:
-        return False
+
+    def menu1(self):
+        print("a) login")
+        print("b) quit")
+        user_input = self.validate(input())
+        if user_input == "a":
+            return True
+
+        else:
+            return False
+
+    def logout(self):
+        self.current_user = None
+
+    # Printar hur många items vi har och sedan printas alla items ut radvis
+    def view_inventory(self):
+        user_inventory = self.inventory[self.current_user]
+        print(f"These are your {len(user_inventory)} items")
+        for i, n in enumerate(user_inventory):
+            print(f"{i+1}) {n}")
+
+    def add_item(self):
+        item = input("Add: ")
+        self.inventory[self.current_user].append(item)
+
+    def start(self):
+        while self.alive:
+            if self.current_user:
+                self.menu2()
+            else:
+                if self.menu1():
+                    print(self.current_user)
+                    self.signin()
+                else:
+                    break
     
 
-def logout():
-    pass
+g = Lagra()
 
-# Printar hur många items vi har och sedan printas alla items ut radvis
-def view_inventory(key):
-    i = 1
-    print(f"These are your {len(inventory[key][1])} items")
-    for n in inventory[key][1]:
-        print(i, n)
-        i+=1
-    
-
-def add_item(key):
-    item = input("Add: ")
-    print(item)
-    inventory[key][1].append(item)
-    
-
-    
-while alive:
-    if menu1():
-        signin()
-    else:
-        break
-    
-
-#print(inventory[("Felix")][1])
-#view_inventory("Felix")
-#login("Niklas", "123")
-#add_item("Niklas", "Godis")
-#view_inventory("Niklas")
+g.start()
+# print(inventory[("Felix")][1])
+# view_inventory("Felix")
+# login("Niklas", "123")
+# add_item("Niklas", "Godis")
+# view_inventory("Niklas")
 
     
